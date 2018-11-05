@@ -1,20 +1,17 @@
-// handleDomo()
 const handleDomo = (e) => {
-  // Preventing the default browser behavior + hiding the error Domo
   e.preventDefault();
-  $('#domoMessage').animate({ width: 'hide' }, 350);
-  
-  // Error checking
-  if ($('#domoName').val() == '' || $('#domoAge').val() == '') {
-    handleError('RAWR! All fields are required');
+
+  $("#domoMessage").animate({width:'hide'},350);
+
+  if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
+    handleError("RAWR! All fields are required");
     return false;
   }
-  
-  // Submitting the Domo
-  sendAjax('POST', $('#domoForm').attr('action'), $('#domoForm').serialize(), function() {
-    loadDomosFromServer();
+
+  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function() {
+    loadDomosFromServer($("#token").val());
   });
-  
+
   return false;
 };
 
@@ -28,95 +25,90 @@ const handleDelete = (e) => {
   });
 };
 
-// DomoForm()
 const DomoForm = (props) => {
   return (
-    <form id='domoForm'
+    <form id="domoForm"
           onSubmit={handleDomo}
-          name='domoForm'
+          name="domoForm"
           action="/maker"
-          method='POST'
-          className='domoForm'>
-      
-      <label htmlFor='name'>Name: </label>
-      <input id='domoName' type='text' name='name' placeholder='Domo Name' />
-      <label htmlFor='age'>Age: </label>
-      <input id='domoAge' type='text' name='age' placeholder='Domo Age' />
-      <label htmlFor='level'>Level: </label>
-      <input id='domoLevel' type='text' name='level' placeholder='Domo Level' />
-      <input type='hidden' name='_csrf' value={props.csrf} />
-      <input className='makeDomoSubmit' type='submit' value='Make Domo'/>
+          method="POST"
+          className="domoForm"
+    >
+        <label htmlFor="name">Name: </label>
+        <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
+        <label htmlFor="age">Age: </label>
+        <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
+        <label htmlFor="level">Level: </label>
+        <input id="domoLevel" type="text" name="level" placeholder="Domo Level"/>
+        <input type="hidden" id="token" name="_csrf" value={props.csrf}/>
+        <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
     </form>
   );
 };
 
-// DomoList()
-const DomoList = (props) => {
-  if (props.domos.length === 0) {
+const DomoList = function(props) {
+  if(props.domos.length === 0) {
     return (
-      <div className='domoList'>
-        <h3 className='emptyDomo'>No Domos yet</h3>
+      <div className="domoList">
+        <h3 className="emptyDomo">No Domos yet</h3>
       </div>
     );
   }
-  
-  const domoNodes = props.domos.map((domo) => {
+
+  const domoNodes = props.domos.map(function(domo) {
     return (
-      <div key={domo._id} className='domo'>
-        <img src='/assets/img/domoface.jpeg' alt='domo face' className='domoFace' />
-        <h3 className='domoName'> Name: {domo.name} </h3>
-        <h3 className='domoAge'> Age: {domo.age} </h3>
-        <h3 className='domoLevel'> Level: {domo.level} </h3>
-        <form         
-            id="deleteDomo"
-            onSubmit={handleDelete}
-            name="deleteDomo"
-            action="/deleteDomo"
-            method="DELETE"
-        ><input type="hidden" name="_id" value={domo._id}/>
+      <div key={domo._id} className="domo">
+        <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace"/>
+        <h3 className="domoName">Name: {domo.name}</h3>
+        <h3 className="domoAge">Age: {domo.age}</h3>
+        <h3 className="domoLevel">Level: {domo.level}</h3>
+        <form id="deleteDomo"
+              onSubmit={handleDelete}
+              name="deleteDomo"
+              action="/deleteDomo"
+              method="DELETE"
+        >
+            <input type="hidden" name="_id" value={domo._id}/>
             <input type="hidden" id="token" name="_csrf" value={props.csrf}/>
             <input className="makeDomoDelete" type="submit" value="Delete"/>
         </form>
       </div>
     );
   });
-  
+
   return (
-    <div className='domoLust'>
+    <div className="domoList">
       {domoNodes}
     </div>
   );
 };
 
-// loadDomosFromServer()
-const loadDomosFromServer = () => {
+const loadDomosFromServer = (csrf) => {
   sendAjax('GET', '/getDomos', null, (data) => {
-    ReactDOM.render( <DomoList domos={data.domos} />,
-                    document.querySelector('#domos')
-      );
+    ReactDOM.render(
+      <DomoList domos={data.domos} csrf={csrf}/>, document.querySelector("#domos")
+    );
   });
 };
 
-// setup()
-const setup = (csrf) => {
-    console.log('1');
-  ReactDOM.render( <DomoForm csrf={csrf} />,
-                  document.querySelector('#makeDomo'));
-  
-  ReactDOM.render( <DomoList domos={[]} />,
-                  document.querySelector('#domos'));
-  
-  loadDomosFromServer();
+const setup = function(csrf) {
+  ReactDOM.render(
+    <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
+  );
+
+  ReactDOM.render(
+    <DomoList domos={[]} csrf={csrf}/>, document.querySelector("#domos")
+  );
+
+  loadDomosFromServer(csrf);
 };
 
-// getToken()
 const getToken = () => {
   sendAjax('GET', '/getToken', null, (result) => {
     setup(result.csrfToken);
   });
 };
 
-// Getting a CSRF token when the page has loaded
-$(document).ready(() => {
+$(document).ready(function() {
   getToken();
 });
