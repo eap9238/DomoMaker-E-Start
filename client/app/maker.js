@@ -27,13 +27,7 @@ const handleDelete = (e) => {
 
 const DomoForm = (props) => {
   return (
-    <form id="domoForm"
-          onSubmit={handleDomo}
-          name="domoForm"
-          action="/maker"
-          method="POST"
-          className="domoForm"
-    >
+    <form id="domoForm" onSubmit={handleDomo} name="domoForm" action="/maker" method="POST" className="domoForm">
         <label htmlFor="name">Name: </label>
         <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
         <label htmlFor="age">Age: </label>

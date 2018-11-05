@@ -30,13 +30,7 @@ var handleDelete = function handleDelete(e) {
 var DomoForm = function DomoForm(props) {
   return React.createElement(
     "form",
-    { id: "domoForm",
-      onSubmit: handleDomo,
-      name: "domoForm",
-      action: "/maker",
-      method: "POST",
-      className: "domoForm"
-    },
+    { id: "domoForm", onSubmit: handleDomo, name: "domoForm", action: "/maker", method: "POST", className: "domoForm" },
     React.createElement(
       "label",
       { htmlFor: "name" },
