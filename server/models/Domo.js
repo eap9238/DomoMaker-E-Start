@@ -53,6 +53,14 @@ DomoSchema.statics.findByOwner = (ownerId, callback) => {
   return DomoModel.find(search).select('name age level').exec(callback);
 };
 
+DomoSchema.statics.removeByID = (docID, callback) => {
+  const search = {
+    _id: docID,
+  };
+
+  return DomoModel.find(search).remove().exec(callback);
+};
+
 DomoModel = mongoose.model('Domo', DomoSchema);
 
 module.exports.DomoModel = DomoModel;
