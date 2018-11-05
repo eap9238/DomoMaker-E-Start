@@ -2,35 +2,20 @@ const models = require('../models');
 
 const Domo = models.Domo;
 
-// getDomos()
-const getDomos = (request, response) => {
-  const rq = request;
-  const rp = response;
-
-  // Actually getting the Domos
-  return Domo.DomoModel.findByOwner(rq.session.account._id, (err, docs) => {
-    if (err) {
-      console.log(err);
-      return rp.status(400).json({ error: 'An error occurred' });
-    }
-
-    return rp.json({ domos: docs });
-  });
-};
-
 const makerPage = (req, res) => {
   Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
-      return res.status(400).json({ error: 'An error occurred' });
+      return res.status(400).json({ error: 'An error occured' });
     }
+
     return res.render('app', { csrfToken: req.csrfToken(), domos: docs });
   });
 };
 
 const makeDomo = (req, res) => {
-  if (!req.body.name || !req.body.age) {
-    return res.status(400).json({ error: 'RAWN! Both name and age are required' });
+  if (!req.body.name || !req.body.age || !req.body.level) {
+    return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
 
   const domoData = {
@@ -49,19 +34,40 @@ const makeDomo = (req, res) => {
   domoPromise.catch((err) => {
     console.log(err);
     if (err.code === 11000) {
-      return res.status(400).json({ error: 'Domo already exists.' });
+      return res.status(400).json({ error: 'Domo already exists' });
     }
-    return res.status(400).json({ error: 'An error occurred' });
+
+    return res.status(400).json({ error: 'An error occured' });
   });
 
   return domoPromise;
 };
 
+// getDomos()
+const getDomos = (request, response) => {
+  const req = request;
+  const res = response;
+
+    // Actually getting the Domos
+  return Domo.DomoModel.findByOwner(req.session.account._id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.json({ domos: docs });
+  });
+};
+
+//delete the g-d-nm domo
+//why won't you just die?
+//please?
 const deleteDomo = (request, response) => {
   const req = request;
   const res = response;
   console.log(req.body);
 
+  //find the domo that needs killing
   return Domo.DomoModel.removeByID(req.body._id, (err) => {
     if (err) {
       console.log(err);
