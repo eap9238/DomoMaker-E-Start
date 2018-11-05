@@ -56,6 +56,22 @@ const makeDomo = (req, res) => {
   return domoPromise;
 };
 
+const deleteDomo = (request, response) => {
+  const req = request;
+  const res = response;
+  console.log(req.body);
+
+  return Domo.DomoModel.removeByID(req.body._id, (err) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occured' });
+    }
+
+    return res.status(204).json();
+  });
+};
+
 module.exports.makerPage = makerPage;
 module.exports.getDomos = getDomos;
 module.exports.make = makeDomo;
+module.exports.deleteDomo = deleteDomo;
