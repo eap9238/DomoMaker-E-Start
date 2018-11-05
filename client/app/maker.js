@@ -18,6 +18,16 @@ const handleDomo = (e) => {
   return false;
 };
 
+const handleDelete = (e) => {
+  e.preventDefault();
+    
+  $("#domoMessage").animate({width:'hide'}, 350);
+    
+  sendAjax('DELETE', $("#deleteDomo").attr("action"), $("#deleteDomo").serialize(), function(){
+    loadDomosFromServer($("token").val());
+  });
+};
+
 // DomoForm()
 const DomoForm = (props) => {
   return (
