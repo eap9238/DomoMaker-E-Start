@@ -37,10 +37,12 @@ const DomoForm = (props) => {
           action="/maker"
           method='POST'
           className='domoForm'>
+      
       <label htmlFor='name'>Name: </label>
       <input id='domoName' type='text' name='name' placeholder='Domo Name' />
       <label htmlFor='age'>Age: </label>
       <input id='domoAge' type='text' name='age' placeholder='Domo Age' />
+      <label htmlFor='level'>Level: </label>
       <input id='domoLevel' type='text' name='level' placeholder='Domo Level' />
       <input type='hidden' name='_csrf' value={props.csrf} />
       <input className='makeDomoSubmit' type='submit' value='Make Domo'/>
@@ -65,6 +67,16 @@ const DomoList = (props) => {
         <h3 className='domoName'> Name: {domo.name} </h3>
         <h3 className='domoAge'> Age: {domo.age} </h3>
         <h3 className='domoLevel'> Level: {domo.level} </h3>
+        <form         
+            id="deleteDomo"
+            onSubmit={handleDelete}
+            name="deleteDomo"
+            action="/deleteDomo"
+            method="DELETE"
+        ><input type="hidden" name="_id" value={domo._id}/>
+            <input type="hidden" id="token" name="_csrf" value={props.csrf}/>
+            <input className="makeDomoDelete" type="submit" value="Delete"/>
+        </form>
       </div>
     );
   });
