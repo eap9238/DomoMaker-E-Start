@@ -13,11 +13,13 @@ const makerPage = (req, res) => {
   });
 };
 
+//create domo
 const makeDomo = (req, res) => {
   if (!req.body.name || !req.body.age || !req.body.level) {
     return res.status(400).json({ error: 'RAWR! Both name and age are required' });
   }
 
+    //set internal data
   const domoData = {
     name: req.body.name,
     age: req.body.age,
