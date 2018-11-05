@@ -37,14 +37,9 @@ const DomoForm = (props) => {
         <label htmlFor="name">Name: </label>
         <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
         <label htmlFor="age">Age: </label>
-        <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
+        <input id="domoAge" type="number" name="age" placeholder="Domo Age"/>
         <label htmlFor="level">Level: </label>
-        <input id="domoLevel" type="select" name="level" placeholder="Domo Level"> 
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-        </input>
+        <input id="domoLevel" type="number" name="level" min="0" max="50" step="1" placeholder="Domo Level"/>
         <input type="hidden" id="token" name="_csrf" value={props.csrf}/>
         <input className="makeDomoSubmit" type="submit" value="Make Domo"/>
     </form>
